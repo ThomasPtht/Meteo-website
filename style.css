@@ -5,8 +5,11 @@
   font-family: "Montserrat", sans-serif;
 }
 body {
-    background: rgb(39,34,195);
-    background: linear-gradient(321deg, rgba(39,34,195,0.7399334733893557) 0%, rgba(5,5,31,1) 99%);
+  background: rgb(39, 34, 195);
+  background: linear-gradient(
+    321deg,
+    rgba(39, 34, 195, 0.7399334733893557) 0%,
+    rgba(5, 5, 31, 1) 99%
   );
 }
 
@@ -14,9 +17,11 @@ body {
   color: white;
   text-transform: uppercase;
   font-size: 1.7em;
+  margin-top: 20px;
+  margin-left: 20px;
 }
 
-.container {
+.container-meteo {
   /* background-image: url(mountains.jpg); */
 
   object-fit: cover;
@@ -26,6 +31,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
 .card {
@@ -33,7 +39,8 @@ body {
   max-width: 440px;
   color: #fff;
   text-align: center;
-  padding: 50px 35px;
+  padding: 25px 35px;
+  margin-bottom: 35px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   background: rgba(255, 255, 255, 0.2);
   border-radius: 15px;
@@ -48,7 +55,7 @@ body {
 }
 
 .search-bar {
-  width: 250px;
+  width: 200px;
   height: 45px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   background: rgba(255, 255, 255, 0.2);
@@ -59,13 +66,41 @@ body {
 }
 
 i {
-    color: white;
+  color: white;
 }
 
 .city {
-  font-size: 1.6em;
+  font-size: 3em;
+  padding-bottom: 10px;
 }
 
 .weather-image {
-  width: 40%;
+  width: 35%;
+  margin: 25px 0;
+}
+
+.temp {
+  font-size: 2.5em;
+}
+
+.conditions-meteo > div {
+  padding-bottom: 10px;
+}
+
+.container-forecast {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.card-forecast {
+  width: 200px;
+  max-width: 440px;
+  color: #fff;
+  text-align: center;
+  padding: 50px 35px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
