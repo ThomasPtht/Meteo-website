@@ -1,3 +1,13 @@
+// Fonction pour afficher la météo par défaut (Paris)
+function afficherMeteoParDefaut() {
+  const villeParDefaut = "Paris";
+  afficherMeteoActuelle(villeParDefaut);
+  afficherMeteo5Jours(villeParDefaut);
+}
+
+// Appel de la fonction au chargement de la page
+afficherMeteoParDefaut();
+
 // Sélectionnez l'élément par son ID
 const dateElement = document.querySelector(".date");
 
@@ -52,11 +62,16 @@ let searchTimeout; // Variable pour stocker le minuteur
 searchBar.addEventListener("input", function (event) {
   clearTimeout(searchTimeout);
   searchTimeout = setTimeout(function () {
-    const cityName = searchBar.value;
+    const cityName = capitalizeFirstLetter(searchBar.value); // Convertir la première lettre en majuscule
     afficherMeteoActuelle(cityName);
-    afficherMeteo5Jours(cityName); // Ajout de l'appel à la fonction pour les prévisions
+    afficherMeteo5Jours(cityName);
   }, 500);
 });
+
+// Fonction pour capitaliser la première lettre
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+}
 
 // Fonction pour afficher la météo actuelle
 export function afficherMeteoActuelle(cityName) {
@@ -74,43 +89,9 @@ export function afficherMeteoActuelle(cityName) {
         windElement.innerHTML = `<i class="fa-solid fa-wind"></i> ${data.wind.speed}km/h`;
 
         const weatherMain = data.weather[0].main;
-        let weatherImage = "";
+        const weatherImageSrc = getWeatherImage(weatherMain);
 
-        switch (weatherMain) {
-          case "Clear":
-            weatherImage = "images/sun.png";
-            break;
-          case "Rain":
-            weatherImage = "images/rain.png";
-            break;
-          case "Mist":
-          case "Smoke":
-          case "Haze":
-          case "Dust":
-          case "Fog":
-          case "Sand":
-          case "Ash":
-          case "Squall":
-          case "Tornado":
-            weatherImage = "images/mist.png";
-            break;
-          case "Snow":
-            weatherImage = "images/snow.png";
-            break;
-          case "Clouds":
-            weatherImage = "images/cloudy.png";
-            break;
-          case "Drizzle":
-            weatherImage = "images/shower-rain.png";
-            break;
-          case "Thunderstorm":
-            weatherImage = "images/storm.png";
-            break;
-          default:
-            weatherImage = "images/cloud.png";
-        }
-
-        weatherImageElement.src = weatherImage;
+        weatherImageElement.src = weatherImageSrc;
       } else {
         console.log("Ville non trouvée dans les données");
       }
@@ -118,6 +99,35 @@ export function afficherMeteoActuelle(cityName) {
     .catch((error) => {
       console.error("Une erreur s'est produite :", error);
     });
+}
+
+function getWeatherImage(weatherMain) {
+  switch (weatherMain) {
+    case "Clear":
+      return "images/sun.png";
+    case "Rain":
+      return "images/rain.png";
+    case "Mist":
+    case "Smoke":
+    case "Haze":
+    case "Dust":
+    case "Fog":
+    case "Sand":
+    case "Ash":
+    case "Squall":
+    case "Tornado":
+      return "images/mist.png";
+    case "Snow":
+      return "images/snow.png";
+    case "Clouds":
+      return "images/cloudy.png";
+    case "Drizzle":
+      return "images/shower-rain.png";
+    case "Thunderstorm":
+      return "images/storm.png";
+    default:
+      return "images/cloud.png";
+  }
 }
 
 ////////////////////// METEO 5 JOURS //////////////////////////////
@@ -136,22 +146,70 @@ function afficherMeteo5Jours(cityName) {
         const forecastCards =
           containerForcast.querySelectorAll(".card-forecast");
 
-        // Itérez sur les prévisions (les 5 prochains jours)
-        for (let i = 0; i < 5; i++) {
-          const forecastData = data.list[i]; // Récupérez les données pour la journée
+        // Créez un objet pour stocker les prévisions par jour
+        const dailyForecasts = {};
 
-          // Utilisez les éléments des cartes de prévision
-          const forecastCity = forecastCards[i].querySelector(".city");
-          const forecastTemp = forecastCards[i].querySelector(".temp");
-          const forecastHumidity = forecastCards[i].querySelector(".humidity");
-          const forecastWind = forecastCards[i].querySelector(".wind");
+        // Itérez sur toutes les entrées de la liste de prévisions
+        data.list.forEach((forecastData) => {
+          const forecastDate = new Date(forecastData.dt_txt);
 
-          // Affichez les données pour la journée i
+          // Vérifiez si la date de la prévision est à l'avenir
+          if (forecastDate > currentDate) {
+            // Utilisez seulement les prévisions pour midi (ou une heure spécifique)
+            if (forecastDate.getHours() === 9) {
+              const dateKey = forecastDate.toLocaleDateString("fr-FR", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              });
 
-          forecastTemp.textContent = Math.round(forecastData.main.temp) + "°C";
-          forecastHumidity.innerHTML = `<i class="fa-solid fa-droplet"></i> ${forecastData.main.humidity}%`;
-          forecastWind.innerHTML = `<i class="fa-solid fa-wind"></i> ${forecastData.wind.speed}km/h`;
-        }
+              // Ajoutez la première prévision au jour correspondant dans l'objet dailyForecasts
+              if (!dailyForecasts[dateKey]) {
+                dailyForecasts[dateKey] = forecastData;
+
+                // Affichez les données pour le jour correspondant
+                const forecastDateElement =
+                  forecastCards[
+                    Object.keys(dailyForecasts).length - 1
+                  ].querySelector(".date");
+                const forecastTemp =
+                  forecastCards[
+                    Object.keys(dailyForecasts).length - 1
+                  ].querySelector(".temp");
+                const forecastHumidity =
+                  forecastCards[
+                    Object.keys(dailyForecasts).length - 1
+                  ].querySelector(".humidity");
+                const forecastWind =
+                  forecastCards[
+                    Object.keys(dailyForecasts).length - 1
+                  ].querySelector(".wind");
+                const forecastImageElement =
+                  forecastCards[
+                    Object.keys(dailyForecasts).length - 1
+                  ].querySelector(".weather-image");
+
+                // Affichez les données pour le jour correspondant
+                const dayOfWeek = forecastDate.toLocaleDateString("fr-FR", {
+                  weekday: "long",
+                });
+                forecastDateElement.textContent = dayOfWeek;
+                forecastTemp.textContent =
+                  Math.round(forecastData.main.temp) + "°C";
+                forecastHumidity.innerHTML = `<i class="fa-solid fa-droplet"></i> ${forecastData.main.humidity}%`;
+                forecastWind.innerHTML = `<i class="fa-solid fa-wind"></i> ${forecastData.wind.speed}km/h`;
+
+                // Récupérez le chemin de l'image en fonction du temps
+                const weatherMain = forecastData.weather[0].main;
+                const weatherImageSrc = getWeatherImage(weatherMain);
+
+                // Définissez le chemin de l'image pour la prévision
+                forecastImageElement.src = weatherImageSrc;
+              }
+            }
+          }
+        });
       } else {
         console.error(
           "La requête n'a pas réussi. Vérifiez la console pour plus de détails."

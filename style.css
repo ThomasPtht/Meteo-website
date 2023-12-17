@@ -5,12 +5,8 @@
   font-family: "Montserrat", sans-serif;
 }
 body {
-  background: rgb(39, 34, 195);
-  background: linear-gradient(
-    321deg,
-    rgba(39, 34, 195, 0.7399334733893557) 0%,
-    rgba(5, 5, 31, 1) 99%
-  );
+  background-color: #0093e9;
+  background-image: linear-gradient(160deg, #0093e9 0%, #80d0c7 100%);
 }
 
 .date {
@@ -41,7 +37,7 @@ body {
   text-align: center;
   padding: 25px 35px;
   margin-bottom: 35px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   background: rgba(255, 255, 255, 0.2);
   border-radius: 15px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -51,7 +47,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 90px;
+  margin-top: 35px;
 }
 
 .search-bar {
@@ -87,20 +83,29 @@ i {
   padding-bottom: 10px;
 }
 
+.humidity-wind {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
 .container-forecast {
   display: flex;
   flex-direction: row;
   gap: 10px;
+  margin: 0 30px;
 }
 
 .card-forecast {
-  width: 200px;
-  max-width: 440px;
+  width: 20%;
+  height: 300px;
   color: #fff;
+  font-size: 12px;
   text-align: center;
-  padding: 50px 35px;
+  padding: 10px 15px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   background: rgba(255, 255, 255, 0.2);
   border-radius: 15px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
