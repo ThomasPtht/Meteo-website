@@ -156,7 +156,7 @@ function afficherMeteo5Jours(cityName) {
           // Vérifiez si la date de la prévision est à l'avenir
           if (forecastDate > currentDate) {
             // Utilisez seulement les prévisions pour midi (ou une heure spécifique)
-            if (forecastDate.getHours() === 9) {
+            if (forecastDate.getHours() === 12) {
               const dateKey = forecastDate.toLocaleDateString("fr-FR", {
                 weekday: "long",
                 year: "numeric",
