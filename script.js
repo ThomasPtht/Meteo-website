@@ -9,7 +9,7 @@ function afficherMeteoParDefaut() {
 afficherMeteoParDefaut();
 
 // Sélectionnez l'élément par son ID
-const dateElement = document.querySelector(".date");
+const dateElement = document.querySelector(".date-today");
 
 // Créez un objet Date pour obtenir la date actuelle
 const currentDate = new Date();
